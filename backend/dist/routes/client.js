@@ -407,25 +407,23 @@ router.post("/llm", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 }));
 router.post("/getdevs", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    debugger;
-    try {
-        const ids = req.body.ids;
-        const developers = yield db_1.default.developer.findMany({
-            where: {
-                id: {
-                    in: ids // Use the 'in' operator for array of IDs
-                }
+    const ids = req.body.ids;
+    const developers = yield db_1.default.developer.findMany({
+        where: {
+            id: {
+                in: ids // Use the 'in' operator for array of IDs
             }
-        });
-        debugger;
-        console.log(developers);
-        return void res.status(200).json(developers);
-    }
-    catch (error) {
-        console.log(error);
-        return void res.status(511).json({
-            message: "Something went wrong"
-        });
-    }
+        }
+    });
+    debugger;
+    console.log(developers);
+    return void res.status(200).json(developers);
 }));
+try { }
+catch (error) {
+    console.log(error);
+    return void res.status(511).json({
+        message: "Something went wrong"
+    });
+}
 exports.default = router;
