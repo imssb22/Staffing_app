@@ -34,7 +34,7 @@ model Developer {
   phone          String    @unique
   password       String
   rating         Float     @default(0)
-  hrate          Int    
+  hrate          Int       
   skills         Skill[]
   chatrooms      Room[]
   projects       Project[]

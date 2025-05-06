@@ -422,8 +422,7 @@ router.post("/llm", async(req, res) => {
   }
 })
 router.post("/getdevs", userAuth, async(req, res)=>{
-  debugger;
-  try {
+ 
     const ids = req.body.ids;
     const developers = await prismaClient.developer.findMany({
       where: {

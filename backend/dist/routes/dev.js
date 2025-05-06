@@ -24,16 +24,18 @@ const router = express_1.default.Router();
 const DEVELOPER = zod_1.default.object({
     name: zod_1.default.string(),
     YOE: zod_1.default.number().multipleOf(0.1),
-    email: zod_1.default.string(),
+    email: zod_1.default.string().email(),
     phone: zod_1.default.string(),
     password: zod_1.default.string(),
     rating: zod_1.default.number().optional(),
+    hrate: zod_1.default.number().optional()
 });
 const SIGNINBODY = zod_1.default.object({
     email: zod_1.default.string(),
     password: zod_1.default.string(),
 });
 router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    debugger;
     const parsedDev = DEVELOPER.safeParse(req.body);
     if (!parsedDev.success) {
         return void res.status(400).json({
@@ -48,6 +50,7 @@ router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function*
                 email: parsedDev.data.email,
                 phone: parsedDev.data.phone,
                 password: parsedDev.data.password,
+                hrate: 0
             },
         });
         if (!developer) {

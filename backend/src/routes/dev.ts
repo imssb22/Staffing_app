@@ -15,16 +15,18 @@ const router = express.Router();
 const DEVELOPER = zod.object({
     name: zod.string(),
     YOE: zod.number().multipleOf(0.1),
-    email: zod.string(),
+    email: zod.string().email(),
     phone: zod.string(),
     password: zod.string(),
     rating: zod.number().optional(),
+    hrate:zod.number().optional()
 });
 const SIGNINBODY = zod.object({
     email: zod.string(),
     password: zod.string(),
 });
 router.post("/signup", async (req, res) => {
+    debugger
     const parsedDev = DEVELOPER.safeParse(req.body);
     if (!parsedDev.success) {
         return void res.status(400).json({
@@ -39,6 +41,7 @@ router.post("/signup", async (req, res) => {
                 email: parsedDev.data.email,
                 phone: parsedDev.data.phone,
                 password: parsedDev.data.password,
+                hrate:0
             },
         });
         if (!developer) {
