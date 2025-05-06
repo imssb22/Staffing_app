@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../public/store';
 import { login } from '@/public/features/authSlice';
 import { setAuthCookie } from '../_cookies/cookies';
+import { Phone } from 'lucide-react';
 
 interface Developer {
   name: string;
@@ -50,7 +51,11 @@ export default function DeveloperSignup() {
       const response = await axios.post(
         `http://localhost:3000/api/v1/dev/signup`,
         {
-          ...formData,
+          name:formData.name,
+          YOE:Number(formData.YOE),
+          email: formData.email,
+          password:formData.password,
+          phone:   formData.phone
         },
         { withCredentials: true }
       );
