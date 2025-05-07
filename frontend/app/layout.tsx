@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Archistudio",
-  description: "Designing spaces that inspire. Building dreams that last.",
+  title: "Staffing Up",
+  description: "Create, launch, and scale your project with a platform that feels like magic.",
 };
 
 export default function RootLayout({
