@@ -2,7 +2,9 @@
 import { useState, KeyboardEvent, useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import { Skill } from "../../../../../backend/src/interfaces"
+import { Skill } from '../../../interfaces'
+import dotenv from "dotenv";
+dotenv.config();
 
 export default function AddSkills() {
     type SkillInput = Omit<Skill, "developer_id">
@@ -18,7 +20,7 @@ export default function AddSkills() {
 
     const getSkills = async() => {
         try {
-            const response = await axios.get('http://localhost:3000/api/v1/dev/getskills')
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dev/getskills`)
             setSkills(response.data[0].skills)
         } catch(e) {
             console.log(e)
@@ -54,7 +56,7 @@ export default function AddSkills() {
 
     const handleSubmit = async () => {
         try {
-            await axios.put('http://localhost:3000/api/v1/dev/addskills', 
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/dev/addskills`, 
                 { skills },
             )
             router.push('/dev/addskills') // Or wherever you want to redirect after success

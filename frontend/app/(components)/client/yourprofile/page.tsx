@@ -5,9 +5,11 @@ import { motion } from 'framer-motion';
 import { Pencil } from 'lucide-react'; // using Lucide icons
 import axios from 'axios';
 import Footer from '../../footer/Footer';
-import { User } from '../../../../../backend/src/interfaces';
+import { User } from '../../../interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/public/store';
+import dotenv from "dotenv";
+dotenv.config();
 
 export default function ProfilePage() {
   const [User, setUser] = useState<User>({
@@ -29,7 +31,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/client/info',
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/info`,
           {
             headers: {
               Authorization: token,
@@ -62,7 +64,7 @@ export default function ProfilePage() {
     if (isEditing) {
       console.log(isEditing);
       try {
-        const res = await axios.put(`http://localhost:3000/api/v1/client/edit/${isEditing}`,
+        const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/client/edit/${isEditing}`,
           { change: tempValue }
         );
         if (res.status === 200) {

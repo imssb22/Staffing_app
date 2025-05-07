@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Sparkles, Loader2 } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation"; 
-
+import dotenv from "dotenv";
+dotenv.config();
 // Add interface for API response
 interface Developer {
   id: string;
@@ -29,7 +30,7 @@ export default function AIProjectPage() {
     setIsLoading(true);
     
     try {
-      const response1 = await axios.post<LLMResponse>("http://localhost:3000/api/v1/client/llm", {
+      const response1 = await axios.post<LLMResponse>(`${process.env.NEXT_PUBLIC_API_URL}/client/llm`, {
         input: prompt 
       });
       console.log(response1);
@@ -44,7 +45,7 @@ export default function AIProjectPage() {
       const name = response1.data.name;
       console.log(ids);
       const token = localStorage.getItem('token');
-      const response2 = await axios.post("http://localhost:3000/api/v1/client/getdevs", { ids: ids },
+      const response2 = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/getdevs`, { ids: ids },
         {
           headers: {
             'Authorization': token
@@ -54,7 +55,7 @@ export default function AIProjectPage() {
       console.log(response2);
 
       const project = await axios.post(
-        "http://localhost:3000/api/v1/client/addproject",
+        `${process.env.NEXT_PUBLIC_API_URL}/client/addproject`,
         {
           Assigned_developers: response2.data,
           timeline: timeline,

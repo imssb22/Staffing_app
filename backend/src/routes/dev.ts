@@ -19,6 +19,7 @@ const DEVELOPER = zod.object({
     phone: zod.string(),
     password: zod.string(),
     rating: zod.number().optional(),
+    hrate: zod.number().optional()
 });
 const SIGNINBODY = zod.object({
     email: zod.string(),
@@ -157,7 +158,7 @@ router.get("/myprojects", devAuth, async (req, res) => {
   });
 
 router.put("/addskills", devAuth, async (req: DeveloperRequest, res: Response) => {
-    debugger
+    
     const skills: Skill[] = req.body.skills as {
         name: string;
         proficiency: string;

@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 import { useParams } from "next/navigation";
 import type { RootState } from '../../../../../public/store';
 import { useSelector } from 'react-redux';
+import dotenv from "dotenv";
+dotenv.config();
 
 interface Chat {
   id?: string;
@@ -27,7 +29,7 @@ export default function Chat() {
   useEffect(() => {
     const getChats = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/v1/chatroom/${roomId}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chatroom/${roomId}`);
         setChats(response.data);
       } catch (error) {
         console.error('Failed to fetch chats:', error);
@@ -37,8 +39,12 @@ export default function Chat() {
   }, [roomId]);
 
   useEffect(() => {
-    if (!username || !userId || !roomId) return;
-    const ws = new WebSocket("ws://localhost:8080");
+    if (!username || !userId || !roomId)
+      {console.log("I am Returning");
+      return;}
+
+      console.log(username + " " + userId + " " + roomId)
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -74,6 +80,7 @@ export default function Chat() {
       ws.close();
     };
   }, [roomId, userId, username]);
+  
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -83,7 +90,11 @@ export default function Chat() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+    if (!message.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+      console.log("1. "+ wsRef.current)
+      console.log("2. "+ wsRef.current?.readyState)
+      console.log("3. " + WebSocket.OPEN )
+      return};
 
     const chatData = {
       type: "chat",

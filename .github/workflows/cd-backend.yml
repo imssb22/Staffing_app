@@ -1,59 +1,61 @@
-name: Continuous Deployment (Prod) (Backend)
-on:
-    push:
-      branches:
-        - main
-jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout the code
-              uses: actions/checkout@v3
+name: Continuous Deployment(Backend)
 
-            - name: Docker Login
-              uses: docker/login-action@v2
-              with:
-                username: ${{ secrets.DOCKERHUB_USERNAME }}
-                password: ${{ secrets.DOCKERHUB_PASSWORD }}
-            - name: Build and push to Docker Hub    
-              uses: docker/build-push-action@v4
-              with:
-                context: .
-                file: ./docker/Dockerfile.backend
-                push: true
-                tags: alexgoot/staff_backend:${{ github.sha }}  
-            - name: Debug database URL
-              run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
-            - name: Deploy to the VM
-              run: |
-                # Save the SSH private key from GitHub secrets to a file
-                echo "${{ secrets.SSH_KEY }}" > ~/ssh_key
-      
-                # Set correct file permissions for the SSH key
-                chmod 600 ~/ssh_key
-      
-                # SSH to the VM and stop/remove the old container, then run the new container
-                ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@4.213.167.255 -t "
-                  # Stop and remove the existing container (if any)
-                  docker network create staffingUp-network || true
-                  docker stop backend || true
-                  docker rm backend || true
-                  docker stop postgres || true
-                  docker rm postgres || true
-                # Run the new container with environment variables
-                  docker run -d \
-                    -e POSTGRES_PASSWORD=randompassword \
-                    --name postgres \
-                    --network staffingUp-network \
-                    postgres
-                    
-                  # Run the new container with environment variables
-                  docker run -d \
-                    -p 3000:3000 \
-                    -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-                    -e JWT_SECRET='${{ secrets.DEV_JWT_SECRET }}' \
-                    -e JWT_SECRET='${{ secrets.USER_JWT_SECRET }}' \
-                    -e JWT_SECRET='${{ secrets.OPENAI_API_KEY }}' \
-                    --name backend \
-                    --network staffingUp-network \
-                    alexgoot/staff_backend:${{ github.sha }}
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Docker Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push to Docker Hub    
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker/Dockerfile.backend
+          push: true
+          tags: alexgoot/staff_backend:${{ github.sha }}
+
+      - name: Debug database URL
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
+
+      - name: Deploy to the VM
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key Shrirang@4.213.167.255 << 'EOF'
+           sudo docker network create staffingUp-network || true
+           sudo docker stop backend || true
+           sudo docker rm backend || true
+           sudo docker stop postgres || true
+           sudo docker rm postgres || true
+
+           sudo docker run -d \
+              -e POSTGRES_PASSWORD=randompassword \
+              --name postgres \
+              --network staffingUp-network \
+              postgres
+
+                   sudo docker run -d \
+                      -p 3000:3000 \
+                      -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+                      -e DEV_JWT_SECRET='${{ secrets.DEV_JWT_SECRET }}' \
+                      -e USER_JWT_SECRET='${{ secrets.USER_JWT_SECRET }}' \
+                      -e OPENAI_API_KEY='${{ secrets.OPENAI_API_KEY }}' \
+                      -e NEXT_PUBLIC_API_URL='${{ secrets.API_URL }}' \
+                      -e WS_URL='${{ secrets.WS_URL }}' \
+                      --name backend \
+                      --network staffingUp-network \
+                      alexgoot/staff_backend:${{ github.sha }} << 'EOF'
+             

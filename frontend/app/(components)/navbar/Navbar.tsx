@@ -10,7 +10,8 @@ import { RootState } from '@/public/store';
 import { logout } from '@/public/features/authSlice';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-
+import dotenv from "dotenv";
+dotenv.config();
 interface NavbarProps {
   onSignupClick: () => void;
 }
@@ -24,7 +25,7 @@ export default function Navbar({ onSignupClick }: NavbarProps) {
 
   async function handlelogout() {
     dispatch(logout());
-    await axios.get("http://localhost:3000/api/v1/logout", {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {
       withCredentials: true
     });
     router.push("/");

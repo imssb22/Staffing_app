@@ -4,6 +4,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 // import { UserIcon, PlusCircleIcon, FolderIcon } from "lucide-react"
 import axios from "axios"
+import dotenv from "dotenv";
+dotenv.config();
 
 // Update the Skill interface
 interface Skill {
@@ -54,7 +56,7 @@ export default function AddProject() {
 
         try {
             const response = await axios.post(
-                'http://localhost:3000/api/v1/client/addproject',
+                `${process.env.NEXT_PUBLIC_API_URL}/client/addproject`,
                 projectData,
             )
             if (response.status === 200) {

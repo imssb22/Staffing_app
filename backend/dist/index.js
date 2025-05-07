@@ -13,7 +13,10 @@ if (process.env.NODE_ENV !== 'test') {
     (0, socket_1.InitWebsocket)();
 }
 exports.app.use((0, cors_1.default)({
-    origin: 'http://localhost:3001',
+    origin: [
+        'http://localhost:3001',
+        'https://staffing-app-ochre.vercel.app'
+    ],
     credentials: true,
 }));
 exports.app.use(express_1.default.json());

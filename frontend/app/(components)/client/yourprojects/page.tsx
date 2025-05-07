@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import dotenv from "dotenv";
+dotenv.config();
 
 interface Project {
   id: string
@@ -27,7 +29,7 @@ export default function YourProjects() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/client/myprojects')
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/myprojects`)
         setProjects(response.data.projects)
         setCreatorName(response.data.username)
         setLoading(false)

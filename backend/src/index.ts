@@ -5,12 +5,15 @@ import cors from "cors"
 import { InitWebsocket } from "./websocket/socket"
 import mainrouter from "./routes"
 
-if (process.env.NODE_ENV !== 'test') {
+
     InitWebsocket();
-  }
+  
 app.use(cors(
     {
-        origin: 'http://localhost:3001',
+        origin: [
+            'http://localhost:3001',
+            'https://staffing-app-ochre.vercel.app'
+        ],
         credentials: true,}
 ))
 app.use(express.json())

@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation"
 
 import { UserIcon, PlusCircleIcon, FolderIcon } from "lucide-react";
-
+import dotenv from "dotenv";
+dotenv.config();
 export default function Home() {
   const router = useRouter()
 

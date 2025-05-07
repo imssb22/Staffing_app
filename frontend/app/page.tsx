@@ -1,7 +1,8 @@
 import LandingPage from './(components)/landing/landing';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-
+import dotenv from "dotenv";
+dotenv.config();
 const verifyAuth = async () => {
   try {
     const cookieStore = await cookies();
@@ -11,7 +12,7 @@ const verifyAuth = async () => {
       return null;
     }
     // Server-side fetch call
-    const response = await fetch("http:localhost:3000/api/v1/verify", {
+    const response = await fetch(`${process.env.API_URL}/verify`, {
       headers: {
         
         Authorization: token,

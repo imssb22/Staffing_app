@@ -8,6 +8,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../public/store';
 import { login } from '@/public/features/authSlice';
+import dotenv from "dotenv";
+dotenv.config();
 
 export default function UserSignin() {
   const dispatch = useDispatch();
@@ -24,7 +26,7 @@ export default function UserSignin() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/client/signin`,
+        `${process.env.NEXT_PUBLIC_API_URL}/client/signin`,
         {
           email: formData.email,
           password: formData.password,

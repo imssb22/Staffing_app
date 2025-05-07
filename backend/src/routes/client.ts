@@ -172,7 +172,7 @@ router.post("/signin", async (req: Request, res: Response) => {
   });
 });
 router.post("/addproject",userAuth ,async (req: UserRequest, res: Response) => {
-  debugger
+  
   
   console.log(req.body)
 
@@ -316,7 +316,7 @@ router.get("/myprojects", userAuth, async (req, res) => {
 
 });
 router.post("/llm", async(req, res) => {
-  debugger
+  
   const input = req.body.input;
   try{
       const devs = await prismaClient.developer.findMany({
@@ -422,7 +422,7 @@ router.post("/llm", async(req, res) => {
   }
 })
 router.post("/getdevs", userAuth, async(req, res)=>{
-  debugger;
+  
   try {
     const ids = req.body.ids;
     const developers = await prismaClient.developer.findMany({
@@ -432,7 +432,7 @@ router.post("/getdevs", userAuth, async(req, res)=>{
         }
       }
     });
-  debugger
+  
   console.log(developers);
   return void res.status(200).json(
     developers

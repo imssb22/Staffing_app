@@ -17,7 +17,7 @@ interface User {
 //}
 //
 interface SocketMap {
-    [key: string]: User;
+     [key: string]: User;
 }
 
 let allSockets: SocketMap = {};

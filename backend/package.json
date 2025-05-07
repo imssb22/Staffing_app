@@ -9,7 +9,7 @@
     "serve": "nodemon dist/index.js",
     "devts": "concurrently  \"npm run watch\" \"npm run serve\"",
     "prod": "npx prisma migrate deploy && npm run devts",
-    "prisma:seed": "ts-node ./prisma/seed.ts"
+    "prisma:seed": "node ./prisma/seed.js"
     
   },
   "keywords": [],

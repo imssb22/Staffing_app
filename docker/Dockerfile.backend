@@ -15,7 +15,7 @@ RUN npm install
 RUN npx prisma generate
 RUN npm run build
 # Start the application
-CMD ["npm", "run", "prod"]
+CMD ["sh", "-c", "npm run prod && npm run prisma:seed"]
 
 
 
