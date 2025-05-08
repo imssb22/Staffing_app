@@ -174,7 +174,7 @@ router.post("/signin", async (req: Request, res: Response) => {
 router.post("/addproject",userAuth ,async (req: UserRequest, res: Response) => {
   
   
-  console.log(req.body)
+  // console.log(req.body)
 
     const parsedProject = PROJECT.safeParse(req.body);
     if (!parsedProject.success) {
@@ -306,7 +306,7 @@ router.get("/myprojects", userAuth, async (req, res) => {
         username: projects[0].name,
         projects: projects[0].projects
     };
-      console.log(response)
+      // console.log(response)
       // projects[0].projects.
       return void res.status(200).json(response)
   } catch (e) {
@@ -317,7 +317,7 @@ router.get("/myprojects", userAuth, async (req, res) => {
   }
 
 });
-router.post("/llm", async(req, res) => {
+router.post("/llm", userAuth, async(req, res) => {
   
   const input = req.body.input;
   try{
@@ -332,7 +332,7 @@ router.post("/llm", async(req, res) => {
               skills : true
           }
       })
-      console.log(devs)
+      // console.log(devs)
       const prompt = `
       context : ${input}
       
@@ -405,13 +405,13 @@ router.post("/llm", async(req, res) => {
         console.log("Failed to parse retrievedList from LLM output");
       }
 
-      console.log(prompt, "\n \n");
-      console.log(outputText, "\n \n");
-      console.log( retrievedList)
-      console.log("budget " + budget )
-      console.log("timeline " + timeline)
-      console.log("Skills: " + skills)
-      console.log("name: " + name)
+      // console.log(prompt, "\n \n");
+      // console.log(outputText, "\n \n");
+      // console.log( retrievedList)
+      // console.log("budget " + budget )
+      // console.log("timeline " + timeline)
+      // console.log("Skills: " + skills)
+      // console.log("name: " + name)
       
       return void res.status(200).json({ timeline, budget, retrievedList, name, skills })
       
@@ -423,6 +423,10 @@ router.post("/llm", async(req, res) => {
       })
   }
 })
+
+// router.post("addmanual", userAuth, async(req, res) => {
+//     const 
+// })
 router.post("/getdevs", userAuth, async(req, res)=>{
   
   try {
@@ -435,7 +439,7 @@ router.post("/getdevs", userAuth, async(req, res)=>{
       }
     });
   
-  console.log(developers);
+  // console.log(developers);
   return void res.status(200).json(
     developers
   )
@@ -446,12 +450,29 @@ router.post("/getdevs", userAuth, async(req, res)=>{
       })
   }
 })
+router.get("/devinfo/:id", userAuth, async (req, res) => {
 
+  const devId = req.params.id;
+    try {
+        const dev = await prismaClient.developer.findFirst({
+          where : {id : devId}
+        })
+        if(dev){
+          return void res.status(200).json(dev);
+        }
+        
+    } catch (e) {
+        console.log("ERR", e);
+        return void res.status(511).json({
+            message: "Could'nt get the data",
+        });
+    }
+});
 router.post("/assigneddevs", userAuth, async(req, res) =>{
   try {
 
     const ids = req.body.ids;
-    console.log(ids)
+    // console.log(ids)
     const developers = await prismaClient.project.findMany({
       where: {
         id: {
@@ -463,7 +484,7 @@ router.post("/assigneddevs", userAuth, async(req, res) =>{
       }
     });
   
-  console.log(developers);
+  // console.log(developers);
   return void res.status(200).json(
     developers
   )

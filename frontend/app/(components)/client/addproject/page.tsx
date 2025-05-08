@@ -1,20 +1,45 @@
 'use client'
 
-import { useState } from "react"
+import {  useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 // import { UserIcon, PlusCircleIcon, FolderIcon } from "lucide-react"
 import axios from "axios"
 import dotenv from "dotenv";
 dotenv.config();
-
+import { useSelector } from 'react-redux'
+import type { RootState } from '../../../../public/store';
 // Update the Skill interface
 interface Skill {
     name: string;
     proficiency: "Beginner" | "Intermediate" | "Advanced" | "Expert";
 }
+interface Developer {
+    id : string,
+    name: string,
+    YOE: number,
+    email: string,
+    phone: string,
+    password: string,
+    hrate : number,
+    rating: number
+  
+  }
+
+  interface LLMResponse {
+    retrievedList: Developer[];
+    timeline: number;
+    budget: number;
+    skills: Array<{ name: string; proficiency: string; }>;
+    name: string;
+  }
+//   interface MergedProject extends Project {
+//     Assigned_developers: Developer[];
+//   }
 
 export default function AddProject() {
     const router = useRouter()
+    const token = useSelector((state: RootState) => state.auth.token);
+    const [loading, setLoading] = useState(true)
     const [projectData, setProjectData] = useState({
         name: "",
         budget: 0,
@@ -26,9 +51,12 @@ export default function AddProject() {
         name: "",
         proficiency: "Beginner"
     })
-    const [loading, setLoading] = useState(false)
     // const [error, setError] = useState("")
-
+    useEffect(() => {
+        if(token){
+            setLoading(false)
+        }
+    },[token])
     // Add skill handler
     const handleAddSkill = (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,7 +68,61 @@ export default function AddProject() {
             setCurrentSkill({ name: "", proficiency: "Beginner" }); // Reset current skill
         }
     };
+    const prompt = `Use the data given in this prompt and search for the appropriate developers accordingly
+                    Name of Project : ${projectData.name}, 
+                    Budget : ${projectData.budget},
+                    timeline: ${projectData.timeline},
+                    required_developers: ${projectData.required_developers},
+                    Skills : ${projectData.skills.map((skill) => `${skill.name}+${skill.proficiency},`).join(', ')},
+                    Use this as the context
+    `
 
+    const getDevs = async() => {
+           
+        try {
+            const response1 = await axios.post<LLMResponse>(`${process.env.NEXT_PUBLIC_API_URL}/client/llm`, {
+              input: prompt 
+            });
+            console.log(response1);
+            const retrievedList = Array.isArray(response1.data.retrievedList) 
+              ? response1.data.retrievedList 
+              : [];
+            const ids = retrievedList.map(item => item.id);
+            const timeline = response1.data.timeline;
+            const budget = response1.data.budget;
+            const required_developers = ids.length;
+            const skills = response1.data.skills;
+            const name = response1.data.name;
+            console.log(ids);
+          
+            const response2 = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/getdevs`, { ids: ids },
+            );
+            console.log(response2);
+      
+            const project = await axios.post(
+              `${process.env.NEXT_PUBLIC_API_URL}/client/addproject`,
+              {
+                Assigned_developers: response2.data,
+                timeline: timeline,
+                budget: budget,
+                required_developers: required_developers,
+                skills: skills,
+                name: name
+              },
+            );
+      
+            if (project.status === 200) {
+              router.push('/client/yourprojects');
+            }
+          } catch (error) {
+            console.error('Failed to create project:', error);
+            // Handle error appropriately
+          } finally {
+            setLoading(false);
+          } 
+    }
+    
+    
     // Remove skill handler
     const handleRemoveSkill = (index: number) => {
         setProjectData({
@@ -53,15 +135,11 @@ export default function AddProject() {
         e.preventDefault()
         setLoading(true)
         // setError("")
-
+        if(!token)return;
+        
+        
         try {
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/client/addproject`,
-                projectData,
-            )
-            if (response.status === 200) {
-                router.push('/client/home')
-            }
+            getDevs();
         } catch (err) {
             // setError("Failed to create project. Please try again.")
             console.error(err)
@@ -69,6 +147,13 @@ export default function AddProject() {
             setLoading(false)
         }
     }
+    if (loading) {
+        return (
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )
+      }
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8">

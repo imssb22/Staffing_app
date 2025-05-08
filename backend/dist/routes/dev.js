@@ -77,7 +77,9 @@ router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
         return void res.status(200).json({
             token: token,
-            role: role
+            role: role,
+            username: developer.name,
+            userId: developer.id,
         });
     }
     catch (e) {
@@ -125,7 +127,9 @@ router.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
         return void res.status(200).json({
             token: token,
-            role: role
+            role: role,
+            username: developer.name,
+            userId: developer.id,
         });
     }
     return void res.status(400).json({

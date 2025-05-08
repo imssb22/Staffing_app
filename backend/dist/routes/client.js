@@ -310,7 +310,7 @@ router.get("/myprojects", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 
         });
     }
 }));
-router.post("/llm", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/llm", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const input = req.body.input;
     try {
         const devs = yield db_1.default.developer.findMany({
@@ -324,7 +324,7 @@ router.post("/llm", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 skills: true
             }
         });
-        console.log(devs);
+        // console.log(devs)
         const prompt = `
       context : ${input}
       
@@ -389,13 +389,13 @@ router.post("/llm", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         catch (e) {
             console.log("Failed to parse retrievedList from LLM output");
         }
-        console.log(prompt, "\n \n");
-        console.log(outputText, "\n \n");
-        console.log(retrievedList);
-        console.log("budget " + budget);
-        console.log("timeline " + timeline);
-        console.log("Skills: " + skills);
-        console.log("name: " + name);
+        // console.log(prompt, "\n \n");
+        // console.log(outputText, "\n \n");
+        // console.log( retrievedList)
+        // console.log("budget " + budget )
+        // console.log("timeline " + timeline)
+        // console.log("Skills: " + skills)
+        // console.log("name: " + name)
         return void res.status(200).json({ timeline, budget, retrievedList, name, skills });
     }
     catch (e) {
@@ -405,6 +405,9 @@ router.post("/llm", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 }));
+// router.post("addmanual", userAuth, async(req, res) => {
+//     const 
+// })
 router.post("/getdevs", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ids = req.body.ids;
@@ -415,13 +418,31 @@ router.post("/getdevs", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0,
                 }
             }
         });
-        console.log(developers);
+        // console.log(developers);
         return void res.status(200).json(developers);
     }
     catch (error) {
         console.log(error);
         return void res.status(511).json({
             message: "Something went wrong"
+        });
+    }
+}));
+router.get("/devinfo/:id", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+
+    const devId = req.params.id;
+    try {
+        const dev = yield db_1.default.developer.findFirst({
+            where: { id: devId }
+        });
+        if (dev) {
+            return void res.status(200).json(dev);
+        }
+    }
+    catch (e) {
+        console.log("ERR", e);
+        return void res.status(511).json({
+            message: "Could'nt get the data",
         });
     }
 }));

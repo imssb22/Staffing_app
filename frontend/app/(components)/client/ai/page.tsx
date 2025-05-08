@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, Loader2 } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation"; 
 import dotenv from "dotenv";
 dotenv.config();
+import {  useSelector } from 'react-redux';
+import { RootState } from '../../../../public/store';
 // Add interface for API response
 interface Developer {
   id: string;
@@ -24,6 +26,12 @@ export default function AIProjectPage() {
   const router = useRouter();
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const token = useSelector((state: RootState) => state.auth.token);
+  useEffect(() => {
+      if (token) {
+        router.push('/client/home');
+      }
+    }, [token, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,11 +51,11 @@ export default function AIProjectPage() {
       const required_developers = ids.length;
       const skills = response1.data.skills;
       const name = response1.data.name;
-      console.log(ids);
+      // console.log(ids);
     
       const response2 = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/getdevs`, { ids: ids },
       );
-      console.log(response2);
+      // console.log(response2);
 
       const project = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/client/addproject`,

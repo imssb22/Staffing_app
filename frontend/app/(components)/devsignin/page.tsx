@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { setAuthCookie } from '../_cookies/cookies';
@@ -17,6 +17,12 @@ export default function DeveloperSignin() {
   const router = useRouter();
   const token = useSelector((state: RootState) => state.auth.token);
   const [formData, setFormData] = useState({ email: '', password: '' });
+
+  useEffect(() => {
+    if (token) {
+      router.push('/dev/home');
+    }
+  }, [token, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,19 +47,20 @@ export default function DeveloperSignin() {
         alert('Login failed');
         return;
       }
-
+      console.log(response.data)
+      
       const { token, role, username, userId } = response.data;
       console.log(username, " ", userId, " ")
       localStorage.setItem('token', token);
       setAuthCookie(token);
       dispatch(
         login({
-          token,
+          token : token,
           isAuthenticated: true,
           email: formData.email,
-          username,
-          role,
-          userId,
+          username : username,
+          role : role,
+          userId : userId,
         })
       );
       router.push('/dev/home');
@@ -63,7 +70,12 @@ export default function DeveloperSignin() {
     }
   };
 
-  return !token ? (
+  if (token) {
+    // Optionally, show a loading spinner or nothing while redirecting
+    return null;
+  }
+
+  return (
     <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 h-screen w-screen flex items-center justify-center overflow-hidden px-4">
       {/* Background Blobs */}
       <motion.div
@@ -100,9 +112,16 @@ export default function DeveloperSignin() {
               required
               className="peer px-4 py-3 w-full rounded-xl border border-gray-700 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400 outline-none bg-transparent text-sm text-white placeholder-transparent"
             />
-            <label
-              className="absolute left-4 top-3 text-cyan-400 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:text-xs peer-focus:text-cyan-300"
-            >
+           <label
+                className="absolute left-4 top-3 text-cyan-400 text-sm transition-all
+                  peer-placeholder-shown:top-3.5 
+                  peer-placeholder-shown:text-gray-500 
+                  peer-focus:top-0 
+                  peer-focus:text-xs 
+                  peer-focus:text-cyan-300
+                  peer-[&:not(:placeholder-shown)]:top-0
+                  peer-[&:not(:placeholder-shown)]:text-xs
+                  peer-[&:not(:placeholder-shown)]:text-cyan-300">
               Email
             </label>
           </div>
@@ -119,8 +138,15 @@ export default function DeveloperSignin() {
               className="peer px-4 py-3 w-full rounded-xl border border-gray-700 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400 outline-none bg-transparent text-sm text-white placeholder-transparent"
             />
             <label
-              className="absolute left-4 top-3 text-cyan-400 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:text-xs peer-focus:text-cyan-300"
-            >
+                className="absolute left-4 top-3 text-cyan-400 text-sm transition-all
+                  peer-placeholder-shown:top-3.5 
+                  peer-placeholder-shown:text-gray-500 
+                  peer-focus:top-0 
+                  peer-focus:text-xs 
+                  peer-focus:text-cyan-300
+                  peer-[&:not(:placeholder-shown)]:top-0
+                  peer-[&:not(:placeholder-shown)]:text-xs
+                  peer-[&:not(:placeholder-shown)]:text-cyan-300">
               Password
             </label>
           </div>
@@ -143,7 +169,5 @@ export default function DeveloperSignin() {
         </p>
       </motion.div>
     </div>
-  ) : (
-    router.push('/dev/home')
   );
 }

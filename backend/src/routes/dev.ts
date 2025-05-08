@@ -25,7 +25,7 @@ const SIGNINBODY = zod.object({
     email: zod.string(),
     password: zod.string(),
 });
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req : DeveloperRequest, res) => {
     const parsedDev = DEVELOPER.safeParse(req.body);
     if (!parsedDev.success) {
         return void res.status(400).json({
@@ -71,7 +71,9 @@ router.post("/signup", async (req, res) => {
           });
         return void res.status(200).json({
             token: token,
-            role: role
+            role: role,
+            username: developer.name,
+            userId : developer.id,
         });
     }catch(e){
         console.log(e);
@@ -81,7 +83,7 @@ router.post("/signup", async (req, res) => {
     }
     
 });
-router.post("/signin", async (req, res) => {
+router.post("/signin", async (req : DeveloperRequest, res) => {
     const parsedsignin = SIGNINBODY.safeParse(req.body);
     if (!parsedsignin.success) {
         return void res.status(400).json({
@@ -123,7 +125,10 @@ router.post("/signin", async (req, res) => {
 
         return void res.status(200).json({
             token: token,
-            role: role
+            role: role,
+            username : developer.name,
+            userId : developer.id,
+
         });
     }
     return void res.status(400).json({

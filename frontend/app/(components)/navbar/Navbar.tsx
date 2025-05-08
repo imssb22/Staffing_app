@@ -21,8 +21,9 @@ export default function Navbar({ onSignupClick }: NavbarProps) {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const role = useSelector((state: RootState) => state.auth.role);
+  // console.log(role)
   const islogin = useSelector((state: RootState) => state.auth.isAuthenticated);
-
   async function handlelogout() {
     dispatch(logout());
     await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {
@@ -43,8 +44,8 @@ export default function Navbar({ onSignupClick }: NavbarProps) {
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 80 }}
       >
-        {/* Logo */}
-        <Link href="/" className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-cyan-400 text-transparent bg-clip-text animate-pulse">
+        {/* Logo {`${role}/home`}*/ }
+        <Link href="home" className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-cyan-400 text-transparent bg-clip-text animate-pulse">
           StaffingUp
         </Link>
 
