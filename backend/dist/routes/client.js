@@ -169,8 +169,8 @@ router.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function*
     });
 }));
 router.post("/addproject", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log(req.body)
     var _a;
-    console.log(req.body);
     const parsedProject = PROJECT.safeParse(req.body);
     if (!parsedProject.success) {
         return void res.status(400).json({
@@ -299,7 +299,7 @@ router.get("/myprojects", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 
             username: projects[0].name,
             projects: projects[0].projects
         };
-        console.log(response);
+        // console.log(response)
         // projects[0].projects.
         return void res.status(200).json(response);
     }
@@ -429,7 +429,6 @@ router.post("/getdevs", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0,
     }
 }));
 router.get("/devinfo/:id", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-
     const devId = req.params.id;
     try {
         const dev = yield db_1.default.developer.findFirst({
@@ -449,7 +448,7 @@ router.get("/devinfo/:id", Auth_1.userAuth, (req, res) => __awaiter(void 0, void
 router.post("/assigneddevs", Auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ids = req.body.ids;
-        console.log(ids);
+        // console.log(ids)
         const developers = yield db_1.default.project.findMany({
             where: {
                 id: {
@@ -460,7 +459,7 @@ router.post("/assigneddevs", Auth_1.userAuth, (req, res) => __awaiter(void 0, vo
                 Assigned_developers: true
             }
         });
-        console.log(developers);
+        // console.log(developers);
         return void res.status(200).json(developers);
     }
     catch (error) {

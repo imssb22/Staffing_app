@@ -25,13 +25,15 @@ interface LLMResponse {
 export default function AIProjectPage() {
   const router = useRouter();
   const [prompt, setPrompt] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const token = useSelector((state: RootState) => state.auth.token);
   useEffect(() => {
-      if (token) {
-        router.push('/client/home');
+      if (!token) {
+       setIsLoading(true);
+       return;
       }
-    }, [token, router]);
+      setIsLoading(false);
+    }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

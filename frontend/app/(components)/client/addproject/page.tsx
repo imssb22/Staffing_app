@@ -53,9 +53,11 @@ export default function AddProject() {
     })
     // const [error, setError] = useState("")
     useEffect(() => {
-        if(token){
-            setLoading(false)
+        if(!token){
+            setLoading(true)
+            return
         }
+        setLoading(false);
     },[token])
     // Add skill handler
     const handleAddSkill = (e: React.FormEvent) => {
