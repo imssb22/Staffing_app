@@ -8,7 +8,7 @@ import { RootState } from "@/public/store";
 
 export default function Unauthorized() {
   const router = useRouter();
-  let role = useSelector((state:RootState)=>state.auth.role)
+  const role = useSelector((state:RootState)=>state.auth.role)
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white flex flex-col items-center justify-center p-6">
       <div className="text-center max-w-xl">
