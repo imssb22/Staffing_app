@@ -44,7 +44,13 @@ export default function YourProjects() {
   if (!token) return;
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/myprojects`)
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/myprojects`,
+          {
+           headers: {
+              'Authorization': token
+            }
+          }
+        )
         // console.log(response.data.projects)
         // let devs = [];
 
@@ -52,6 +58,13 @@ export default function YourProjects() {
         const ids = projectData.map((item : Project) => item.id)
         // console.log(ids)
         const devs = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/assigneddevs`, { ids: ids },
+          {
+            
+              headers: {
+                'Authorization': token
+              
+            }
+          }
         );
         // console.log("devs: " ,devs.data)
         

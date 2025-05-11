@@ -42,7 +42,14 @@ export default function AIProjectPage() {
     try {
       const response1 = await axios.post<LLMResponse>(`${process.env.NEXT_PUBLIC_API_URL}/client/llm`, {
         input: prompt 
-      });
+      },
+      {
+            
+        headers: {
+          'Authorization': token
+        
+      }
+    });
       console.log(response1);
       const retrievedList = Array.isArray(response1.data.retrievedList) 
         ? response1.data.retrievedList 
@@ -56,6 +63,11 @@ export default function AIProjectPage() {
       // console.log(ids);
     
       const response2 = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/getdevs`, { ids: ids },
+        {    
+          headers: {
+            'Authorization': token
+        }
+      },
       );
       // console.log(response2);
 
@@ -69,6 +81,11 @@ export default function AIProjectPage() {
           skills: skills,
           name: name
         },
+        {   
+          headers: {
+            'Authorization': token 
+        }
+      }
       );
 
       if (project.status === 200) {
