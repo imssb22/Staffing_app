@@ -113,7 +113,7 @@ export default function AddProject() {
               },
             );
       
-            if (project.status === 200) {
+             if (project.status === 200) {
               router.push('/client/yourprojects');
             }
           } catch (error) {
