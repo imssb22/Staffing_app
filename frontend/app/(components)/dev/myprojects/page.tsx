@@ -31,7 +31,14 @@ export default function YourProjects() {
     if (!token) return;
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dev/myprojects`)
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dev/myprojects`,
+          {
+            headers: {
+              'Authorization': token 
+          }
+        }
+
+        )
         setProjects(response.data.projects)
         setCreatorName(response.data.username)
         setLoading(false)
