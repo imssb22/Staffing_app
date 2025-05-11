@@ -76,6 +76,13 @@ export default function AddSkills() {
         try {
             await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/dev/addskills`, 
                 { skills },
+                  {
+            
+              headers: {
+                'Authorization': token
+              
+            }
+          }
             )
             router.push('/dev/addskills') // Or wherever you want to redirect after success
         } catch (error) {
