@@ -16,14 +16,17 @@ export default function AddSkills() {
     const [currentSkill, setCurrentSkill] = useState('')
     const [currentProficiency, setCurrentProficiency] = useState('Beginner')
     const [editingIndex, setEditingIndex] = useState<number | null>(null)
+    const [prev, setPrev] = useState<SkillInput[]>([])
+    const [refresh, setRefresh] = useState(false);
     const router = useRouter()
 
     useEffect(() => {
         getSkills()
-    }, [skills]) // Remove skills dependency to prevent infinite loop
+    }, [refresh]) // Remove skills dependency to prevent infinite loop
 
     const getSkills = async() => {
         try {
+            setPrev(skills);
             const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dev/getskills`,
                 {
             
@@ -34,6 +37,9 @@ export default function AddSkills() {
           }
             )
             setSkills(response.data[0].skills)
+            if(prev!==skills){
+                setRefresh(true);
+            }
         } catch(e) {
             console.log(e)
         }
