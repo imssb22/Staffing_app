@@ -33,10 +33,9 @@ function InitWebsocket() {
                 };
             }
             if (parsedMessage.type === "chat") {
-                // console.log("")
                 console.log("user with " + userId + " messaged");
                 const currRoom = allSockets[userId].room;
-                const chats = yield db_1.default.chat.create({
+                yield db_1.default.chat.create({
                     data: {
                         name_of_creator: username,
                         room_id: currRoom,
@@ -44,9 +43,17 @@ function InitWebsocket() {
                         message: parsedMessage.payload.message
                     }
                 });
+                // Create a proper message object
+                const messageToSend = {
+                    type: "chat",
+                    name_of_creator: username,
+                    message: parsedMessage.payload.message,
+                    room_id: currRoom,
+                    createdAt: new Date()
+                };
                 Object.entries(allSockets).forEach(([key, val]) => {
                     if (currRoom === val.room && key !== userId) {
-                        val.socket.send(parsedMessage.payload.message);
+                        val.socket.send(JSON.stringify(messageToSend)); // Send stringified JSON object
                     }
                 });
             }

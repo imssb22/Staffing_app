@@ -27,6 +27,8 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState<keyof Developer | null>(null);
   const [tempValue, setTempValue] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [prevdeveloper,setPrevdeveloper] = useState<Developer>()
+  const [refresh, setRefresh] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
   const startEditing = (field: keyof Developer) => {
@@ -58,7 +60,11 @@ export default function ProfilePage() {
           rating: data.rating
           
         });
-        
+        if(prevdeveloper!==developer){
+    setPrevdeveloper(developer);
+    setRefresh(true);
+
+  }
       } catch (e) {
         console.log(e);
         alert("Something went wrong");
@@ -66,7 +72,9 @@ export default function ProfilePage() {
     };
 
     getData();
-  }, [developer, token]);
+  }, [refresh]);
+  
+  // setRefresh(false);
 
   const saveEdit = async () => {
     if (isEditing) {

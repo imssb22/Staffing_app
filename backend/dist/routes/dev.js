@@ -237,7 +237,7 @@ router.get("/info", Auth_1.devAuth, (req, res) => __awaiter(void 0, void 0, void
 router.put("/edit/:field", Auth_1.devAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const field = req.params.field;
-    const change = req.body.change;
+    const change = field === "YOE" ? Number(req.body.change) : req.body.change;
     const devId = (_a = req.developer) === null || _a === void 0 ? void 0 : _a.id;
     try {
         const data = yield db_1.default.developer.update({

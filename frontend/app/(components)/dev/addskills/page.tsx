@@ -4,9 +4,13 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Skill } from '../../../interfaces'
 import dotenv from "dotenv";
+import { useSelector } from 'react-redux'
+import { RootState } from '@/public/store'
+
 dotenv.config();
 
 export default function AddSkills() {
+    const token = useSelector((state: RootState) => state.auth.token);
     type SkillInput = Omit<Skill, "developer_id">
     const [skills, setSkills] = useState<SkillInput[]>([])
     const [currentSkill, setCurrentSkill] = useState('')
@@ -20,7 +24,15 @@ export default function AddSkills() {
 
     const getSkills = async() => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dev/getskills`)
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dev/getskills`,
+                {
+            
+              headers: {
+                'Authorization': token
+              
+            }
+          }
+            )
             setSkills(response.data[0].skills)
         } catch(e) {
             console.log(e)

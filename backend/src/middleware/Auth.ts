@@ -56,7 +56,6 @@ export const devAuth = async (
     next: NextFunction
 ) => {
     try {
-        debugger
         const token = req.headers.authorization;
         if (!token) {
             return void res.status(400).json({

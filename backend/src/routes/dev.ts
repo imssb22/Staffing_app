@@ -237,9 +237,10 @@ router.get("/info", devAuth, async (req, res) => {
 });
 
 router.put("/edit/:field", devAuth, async (req, res) => {
-    
     const field = req.params.field;
-    const change = req.body.change;
+   
+    const change = field==="YOE"?Number(req.body.change):req.body.change;
+     
     const devId = (req as any).developer?.id;
     try {
         const data = await prismaClient.developer.update({

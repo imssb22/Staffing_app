@@ -49,7 +49,6 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 exports.userAuth = userAuth;
 const devAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        debugger;
         const token = req.headers.authorization;
         if (!token) {
             return void res.status(400).json({
