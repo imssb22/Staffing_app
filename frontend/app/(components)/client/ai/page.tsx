@@ -40,6 +40,11 @@ export default function AIProjectPage() {
     setIsLoading(true);
     
     try {
+      if(!token){
+        alert("Token not present");
+        setIsLoading(true);
+        return;
+      }
       const response1 = await axios.post<LLMResponse>(`${process.env.NEXT_PUBLIC_API_URL}/client/llm`, {
         input: prompt 
       },
