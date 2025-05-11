@@ -80,7 +80,12 @@ export default function ProfilePage() {
     if (isEditing) {
       try {
         const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/dev/edit/${isEditing}`,
-          { change: tempValue }
+          { change: tempValue },
+          {    
+          headers: {
+            'Authorization': token
+        }
+      }
         );
         if (res.status === 200) {
           setDeveloper(prev => ({
