@@ -4,17 +4,7 @@ interface User {
     socket: WebSocket;
     room: string;
 }
-//{ type : join,
-// userId : "asdfas"
-// payload : {
-//  roomId : "13214"
-//}
-//type : chat,
-//userId : "sfag"
-// payload : {
-// message : "faf", }
-//}
-//
+
 interface SocketMap {
      [key: string]: User;
 }

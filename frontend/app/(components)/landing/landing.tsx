@@ -49,7 +49,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            Sarvesh, launch, and scale your project with a platform that feels like magic.
+            Creat, launch, and scale your project with a platform that feels like magic.
           </motion.p>
 
           <button
