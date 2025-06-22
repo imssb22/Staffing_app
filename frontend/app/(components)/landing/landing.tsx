@@ -101,7 +101,7 @@ export default function Home() {
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              Our mission is to create digital experiences that feel intuitive, effortless, and extraordinary.
+              Gulshan mission is to create digital experiences that feel intuitive, effortless, and extraordinary.
             </motion.p>
           </div>
         </section>
