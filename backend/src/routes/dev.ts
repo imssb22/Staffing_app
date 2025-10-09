@@ -11,6 +11,7 @@ import { Request, Response } from "express";
 interface DeveloperRequest extends Request {
     developer?: Developer;
 }
+
 const router = express.Router();
 const DEVELOPER = zod.object({
     name: zod.string(),
