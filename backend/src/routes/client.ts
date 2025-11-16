@@ -15,6 +15,8 @@ const openaiClient = new OpenAI({
 interface UserRequest extends Request {
   user?: User;
 }
+// This code is for prisma client
+//
 
 import prismaClient from "../db/db";
 
@@ -69,7 +71,7 @@ router.post("/signup", async (req: Request, res: Response) => {
         company: parsedUser.data.company,
         password: parsedUser.data.password,
         phone: parsedUser.data.phone,
-        rating: parsedUser.data.rating,
+        rating: parsedUser.data.rating
       },
     });
 const role = "client"
