@@ -1,3 +1,4 @@
 .env
 node_modules
 staffingUp_key.pem
+CLAUDE.md

@@ -2,6 +2,7 @@ import express from "express";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import zod from "zod";
+import bcrypt from "bcrypt";
 import { userAuth } from "../middleware/Auth";
 import { User } from "../interfaces";
 import { Developer } from "../interfaces";
